@@ -3,8 +3,8 @@ import Todo from './Todo';
 
 function App() {
   return (
-    <div class="todo-container">
-      <div class="card">
+    <div className="todo-container">
+      <div className="card">
         <Todo></Todo>
       </div>
     </div>
