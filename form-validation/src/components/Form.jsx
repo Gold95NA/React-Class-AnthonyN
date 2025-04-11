@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import validateForm from '../utilities/validateform';
-import clearFormData from '../utilities/clearForm';
-import submitFormData from '../utilities/submitForm';
+import clearFormData from "../utilities/clearForm";
+import submitFormData from "../utilities/submitForm";
 
 function Form({ onClose }) {
 
@@ -17,9 +16,57 @@ function Form({ onClose }) {
 
   const [errors, setErrors] = useState({});
 
+  const validateForm = (field, value) => {
+
+    switch (field) {
+
+      case 'name':
+
+        if (!value.trim()) return 'Name is required.';
+
+        if (value.length < 2) return 'Name must be at least 2 characters.';
+
+        if (!/^[a-zA-Z\s'-]+$/.test(value)) return 'Name must contain only letters.';
+
+        return '';
+
+      case 'email':
+
+        if (!value.trim()) return 'Email is required.';
+
+        if (value.length < 5) return 'Email must be at least 5 characters.';
+
+        if (!/^\S+@\S+\.\S+$/.test(value)) return 'Email format is invalid.';
+
+        return '';
+
+      case 'age':
+
+        if (!value.trim()) return 'Age is required.';
+
+        if (isNaN(Number(value))) return 'Age must be a number.';
+
+        if (Number(value) <= 0) return 'Age must be greater than zero.';
+
+        return '';
+
+      default:
+
+        return '';
+
+    }
+
+  };
+
   const handleChange = (e) => {
 
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+
+    setFormData(prev => ({ ...prev, [name]: value }));
+
+    const error = validateForm(name, value);
+    
+    setErrors(prev => ({ ...prev, [name]: error }));
 
   };
 
@@ -35,102 +82,137 @@ function Form({ onClose }) {
 
     e.preventDefault();
 
-    const validationErrors = validateForm(formData);
+    
+    const newErrors = {};
 
-    if (Object.keys(validationErrors).length > 0) {
+    for (const key in formData) {
 
-      setErrors(validationErrors);
+      const error = validateForm(key, formData[key]);
 
-    } else {
-
-      submitFormData(formData);
-
-      handleClear();
-
-      onClose(); 
+      if (error) newErrors[key] = error;
 
     }
+
+    if (Object.keys(newErrors).length > 0) {
+
+      setErrors(newErrors);
+      
+      return; 
+
+    }
+
+    submitFormData(formData);
+
+    handleClear();
+
+    onClose(); 
 
   };
 
   return (
 
-    <form onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
+    <div style={{
 
-      <div>
+      height: '100vh',
+      
+      display: 'flex',
+      
+      alignItems: 'center',
 
-        <label>Name: </label>
+      justifyContent: 'center',
 
-        <input
+    }}>
 
-          name="name"
+      <form
 
-          value={formData.name}
+        onSubmit={handleSubmit}
 
-          onChange={handleChange}
+        style={{
 
-        />
+          display: 'flex',
 
-        {errors.name && <div style={{ color: 'red' }}>{errors.name}</div>}
+          flexDirection: 'column',
 
-      </div>
+          gap: '1rem',
 
-      <div>
+          padding: '2rem',
 
-        <label>Email: </label>
+          border: '1px solid #ccc',
 
-        <input
+          borderRadius: '8px',
 
-          name="email"
+          background: '#444',
 
-          value={formData.email}
+          color: '#fff',
 
-          onChange={handleChange}
-          
-          type="text"
+          minWidth: '300px'
 
-        />
+        }}>
 
-        {errors.email && <div style={{ color: 'red' }}>{errors.email}</div>}
-        
-      </div>
+        {['name', 'email', 'age'].map((field) => (
 
-      <div>
+          <div key={field} style={{ display: 'flex', flexDirection: 'column' }}>
 
-        <label>Age: </label>
+            <label style={{ marginBottom: '0.25rem' }}>
 
-        <input
+              {field.charAt(0).toUpperCase() + field.slice(1)}:
 
-          name="age"
+            </label>
 
-          value={formData.age}
+            <input
 
-          onChange={handleChange}
+              name={field}
 
-          type="text"
+              type="text"
 
-        />
+              value={formData[field]}
 
-        {errors.age && <div style={{ color: 'red' }}>{errors.age}</div>}
+              onChange={handleChange}
 
-      </div>
+              style={{
 
-      <button type="button" onClick={handleClear} style={{ marginTop: '1rem' }}>
+                padding: '0.5rem',
 
-        Clear
+                border: '1px solid #444',
 
-      </button>
+                borderRadius: '4px',
 
-      <button type="submit" style={{ marginLeft: '1rem' }}>
+                background: '#333',
 
-        Submit
+                color: '#fff',
 
-      </button>
+              }}
 
-    </form>
+            />
+
+            {errors[field] && (
+
+              <span style={{ color: 'tomato', marginTop: '0.25rem' }}>
+
+                {errors[field]}
+
+              </span>
+
+            )}
+
+          </div>
+
+        ))}
+
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+
+          <button type="button" onClick={handleClear}>Clear</button>
+
+          <button type="submit">Submit</button>
+
+        </div>
+
+      </form>
+
+    </div>
 
   );
-
+  
 }
 
 export default Form;

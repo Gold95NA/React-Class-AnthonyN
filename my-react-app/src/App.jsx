@@ -49,31 +49,54 @@ const App = () => {
 
   return (
 
-    <div style={{ padding: '2rem' }}>
+    <div style={{
 
-      <h1>My Todo List</h1>
+      height: '100vh',
 
-      {todos.map(todo => (
+      width: '100vw',
 
-        <TodoItem key={todo.id} task={todo} onMarkDone={handleMarkDone} />
+      display: 'flex',
 
-      ))}
+      alignItems: 'center',
 
-      <ConfModal
+      justifyContent: 'center',
 
-        visible={modalVisible}
+      backgroundColor: '#000'
 
-        onConfirm={confirmCompletion}
+    }}>
 
-        onCancel={cancelModal}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-        task={selectedTask}
+        <h1 style={{ color: 'white' }}>My Todo List</h1>
 
-      />
+        <div style={{ display: 'flex', gap: '1rem' }}>
+
+          {todos.map(todo => (
+
+            <TodoItem key={todo.id} task={todo} onMarkDone={handleMarkDone} />
+
+          ))}
+
+        </div>
+
+        <ConfModal
+
+          visible={modalVisible}
+
+          onConfirm={confirmCompletion}
+
+          onCancel={cancelModal}
+
+          task={selectedTask}
+
+        />
+
+      </div>
 
     </div>
-    
+
   );
+  
 
 };
 

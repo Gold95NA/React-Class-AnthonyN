@@ -4,7 +4,23 @@ const TodoItem = ({ task, onMarkDone }) => {
 
   return (
 
-    <div style={{ marginBottom: '1rem', padding: '1rem', border: '1px solid #ccc' }}>
+    <div style={{ 
+
+      display: 'flex', 
+
+      justifyContent: 'center',
+       
+      flexDirection: 'column', 
+
+      gap: '20px', 
+      
+      marginBottom: '1rem', 
+
+      padding: '1rem', 
+
+      border: '1px solid #ccc'
+
+      }}>
 
       <p style={{ margin: 0 }}>{task.text}</p>
 
