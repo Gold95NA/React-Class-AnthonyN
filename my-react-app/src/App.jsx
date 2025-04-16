@@ -19,6 +19,7 @@ const App = () => {
   const [selectedTask, setSelectedTask] = useState(null);
 
   const handleMarkDone = (task) => {
+
     setSelectedTask(task);
 
     setModalVisible(true);
@@ -27,9 +28,9 @@ const App = () => {
 
   const confirmCompletion = () => {
 
-    setTodos(prev => prev.map(t =>
+    setTodos(prev => prev.map(item =>
 
-      t.id === selectedTask.id ? { ...t, completed: true } : t
+      item.id === selectedTask.id ? { ...item, completed: true } : item
 
     ));
 
@@ -97,7 +98,6 @@ const App = () => {
 
   );
   
-
 };
 
 export default App;
