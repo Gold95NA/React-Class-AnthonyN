@@ -1,5 +1,3 @@
-//Anthony Nalle
-
 import { useState } from 'react';
 import clearFormData from "../utilities/clearForm";
 import submitFormData from "../utilities/submitForm";
@@ -51,7 +49,7 @@ function Form({ onClose }) {
     setErrors({});
   };
 
-  const handleSubmit = (e) => 
+  const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = {};
     for (const key in formData) {
